@@ -11,40 +11,8 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
 import { getDashboardStats, getRecentScans, getAlerts, ApiError } from "@/lib/api"
 
-interface ScanResult {
-  _id: string
-  url: string
-  scan_type: string
-  threat_level: string
-  threat_score: number
-  scan_time: number
-  timestamp: string
-  status: string
-}
-
-interface Alert {
-  _id: string
-  message: string
-  severity: string
-  alert_type: string
-  timestamp: string
-  read: boolean
-}
-
-interface DashboardStats {
-  user_email: string
-  scans_today: number
-  threats_detected: number
-  risk_reduction: number
-  current_threat_score: number
-  recent_scans: ScanResult[]
-  recent_alerts: Alert[]
-  threat_distribution: Record<string, number>
-  scan_types_distribution: Record<string, number>
-}
-
 export default function DashboardPage() {
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null)
+  const [dashboardStats, setDashboardStats] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)

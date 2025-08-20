@@ -2,7 +2,8 @@
  * API utility functions for making requests to the backend
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ''
+// Always call Next.js API routes on same origin. External backend base is handled inside app/api routes.
+const API_BASE_URL = ''
 
 export interface ApiResponse<T = any> {
   success: boolean
@@ -36,17 +37,7 @@ export interface ScreenshotAnalysisResult {
   gemini_used: boolean
 }
 
-export interface DashboardStats {
-  user_email: string
-  scans_today: number
-  threats_detected: number
-  risk_reduction: number
-  current_threat_score: number
-  recent_scans: any[]
-  recent_alerts: any[]
-  threat_distribution: Record<string, number>
-  scan_types_distribution: Record<string, number>
-}
+// Dashboard types are intentionally untyped to avoid interface coupling
 
 class ApiError extends Error {
   constructor(
@@ -67,7 +58,7 @@ async function apiRequest<T>(
   options: RequestInit = {},
   userEmail: string
 ): Promise<ApiResponse<T>> {
-  const url = `${API_BASE_URL}${endpoint}`
+  const url = endpoint // use relative API routes only
   
   const config: RequestInit = {
     ...options,
@@ -173,8 +164,8 @@ export async function analyzeScreenshot(
  */
 export async function getDashboardStats(
   userEmail: string
-): Promise<ApiResponse<DashboardStats>> {
-  return apiRequest<DashboardStats>('/api/dashboard/stats', {
+): Promise<any> {
+  return apiRequest<any>('/api/dashboard/stats', {
     method: 'GET'
   }, userEmail)
 }
